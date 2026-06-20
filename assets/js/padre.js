@@ -13,12 +13,19 @@ const ambientCanvas = document.getElementById("ambientCanvas");
 const ambientCtx = ambientCanvas.getContext("2d");
 
 let audioContext = null;
+let masterGain = null;
 let soundEnabled = true;
+let symphonyStarted = false;
+let symphonyTimer = 0;
 let gratitudeTimers = [];
 let motes = [];
+let stars = [];
+let comets = [];
 let bursts = [];
 let animationFrame = 0;
 let lastDraw = 0;
+let nextCometAt = 900;
+let activeStageIndex = 0;
 
 function setupAudio() {
   if (audioContext) return;
@@ -28,21 +35,24 @@ function setupAudio() {
     return;
   }
   audioContext = new AudioCtor();
+  masterGain = audioContext.createGain();
+  masterGain.gain.value = 0.72;
+  masterGain.connect(audioContext.destination);
 }
 
-function playNote(frequency, duration = 0.16, volume = 0.035, delay = 0) {
-  if (!soundEnabled || !audioContext) return;
+function playNote(frequency, duration = 0.16, volume = 0.055, delay = 0, type = "sine") {
+  if (!soundEnabled || !audioContext || !masterGain) return;
   const start = audioContext.currentTime + delay;
   const oscillator = audioContext.createOscillator();
   const gain = audioContext.createGain();
 
-  oscillator.type = "sine";
+  oscillator.type = type;
   oscillator.frequency.setValueAtTime(frequency, start);
   gain.gain.setValueAtTime(0, start);
-  gain.gain.linearRampToValueAtTime(volume, start + 0.015);
+  gain.gain.linearRampToValueAtTime(volume, start + Math.min(0.08, duration * 0.22));
   gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
   oscillator.connect(gain);
-  gain.connect(audioContext.destination);
+  gain.connect(masterGain);
   oscillator.start(start);
   oscillator.stop(start + duration + 0.03);
 }
@@ -53,8 +63,50 @@ function playChord(frequencies) {
   });
 }
 
+function scheduleSymphonyCycle() {
+  if (!audioContext || !soundEnabled) return;
+
+  const chords = [
+    [130.81, 196, 261.63, 329.63],
+    [110, 164.81, 220, 261.63],
+    [87.31, 130.81, 174.61, 220],
+    [98, 146.83, 196, 246.94]
+  ];
+  const melody = [
+    [523.25, 0.25], [659.25, 0.78], [783.99, 1.34],
+    [659.25, 2.2], [587.33, 2.78], [523.25, 3.36],
+    [440, 4.22], [523.25, 4.82], [659.25, 5.42],
+    [587.33, 6.28], [493.88, 6.88], [523.25, 7.48]
+  ];
+
+  chords.forEach((chord, chordIndex) => {
+    const offset = chordIndex * 2;
+    chord.forEach((frequency, voiceIndex) => {
+      playNote(
+        frequency,
+        2.35,
+        voiceIndex === 0 ? 0.055 : 0.035,
+        offset,
+        voiceIndex % 2 === 0 ? "sine" : "triangle"
+      );
+    });
+  });
+
+  melody.forEach(([frequency, delay], index) => {
+    playNote(frequency, 0.72, 0.046, delay, index % 3 === 0 ? "sine" : "triangle");
+  });
+}
+
+function startSymphony() {
+  if (symphonyStarted) return;
+  symphonyStarted = true;
+  scheduleSymphonyCycle();
+  symphonyTimer = window.setInterval(scheduleSymphonyCycle, 8000);
+}
+
 function activateStage(index) {
   if (!stages[index]) return;
+  activeStageIndex = index;
 
   stages.forEach((stage) => {
     stage.classList.remove("is-active");
@@ -121,6 +173,84 @@ function resizeAmbient() {
     speed: 0.08 + Math.random() * 0.22,
     drift: -0.12 + Math.random() * 0.24
   }));
+
+  const starCount = Math.max(95, Math.floor((window.innerWidth * window.innerHeight) / 7200));
+  stars = Array.from({ length: starCount }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: 0.45 + Math.random() * 1.65,
+    alpha: 0.28 + Math.random() * 0.68,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.0008 + Math.random() * 0.0021
+  }));
+  comets = [];
+  nextCometAt = 700 + Math.random() * 900;
+}
+
+function createComet() {
+  const fromLeft = Math.random() > 0.28;
+  const speed = 4.5 + Math.random() * 3.2;
+  comets.push({
+    x: fromLeft ? -90 : window.innerWidth + 90,
+    y: window.innerHeight * (0.08 + Math.random() * 0.46),
+    vx: fromLeft ? speed : -speed,
+    vy: 1.7 + Math.random() * 1.8,
+    length: 70 + Math.random() * 80,
+    alpha: 0.8 + Math.random() * 0.2,
+    life: 0
+  });
+}
+
+function drawStarField(time) {
+  stars.forEach((star) => {
+    const twinkle = 0.5 + Math.sin(time * star.speed + star.phase) * 0.5;
+    ambientCtx.beginPath();
+    ambientCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+    ambientCtx.fillStyle = `rgba(255, 244, 216, ${star.alpha * (0.42 + twinkle * 0.58)})`;
+    ambientCtx.fill();
+  });
+
+  if (time >= nextCometAt) {
+    createComet();
+    nextCometAt = time + 3000 + Math.random() * 4200;
+  }
+
+  comets = comets.filter((comet) => (
+    comet.x > -220 &&
+    comet.x < window.innerWidth + 220 &&
+    comet.y < window.innerHeight + 120 &&
+    comet.alpha > 0.03
+  ));
+
+  comets.forEach((comet) => {
+    comet.x += comet.vx;
+    comet.y += comet.vy;
+    comet.life += 1;
+    if (comet.life > 68) comet.alpha *= 0.97;
+
+    const magnitude = Math.hypot(comet.vx, comet.vy);
+    const tailX = comet.x - (comet.vx / magnitude) * comet.length;
+    const tailY = comet.y - (comet.vy / magnitude) * comet.length;
+    const gradient = ambientCtx.createLinearGradient(tailX, tailY, comet.x, comet.y);
+    gradient.addColorStop(0, "rgba(255, 255, 255, 0)");
+    gradient.addColorStop(0.72, `rgba(151, 211, 229, ${comet.alpha * 0.34})`);
+    gradient.addColorStop(1, `rgba(255, 247, 220, ${comet.alpha})`);
+
+    ambientCtx.beginPath();
+    ambientCtx.moveTo(tailX, tailY);
+    ambientCtx.lineTo(comet.x, comet.y);
+    ambientCtx.strokeStyle = gradient;
+    ambientCtx.lineWidth = 1.6;
+    ambientCtx.stroke();
+
+    ambientCtx.beginPath();
+    ambientCtx.arc(comet.x, comet.y, 2.2, 0, Math.PI * 2);
+    ambientCtx.fillStyle = `rgba(255, 247, 220, ${comet.alpha})`;
+    ambientCtx.shadowBlur = 14;
+    ambientCtx.shadowColor = "#fff0c4";
+    ambientCtx.fill();
+    ambientCtx.shadowBlur = 0;
+  });
 }
 
 function createBurst() {
@@ -148,18 +278,22 @@ function drawAmbient(time) {
   lastDraw = time;
   ambientCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-  motes.forEach((mote) => {
-    mote.y -= mote.speed;
-    mote.x += mote.drift;
-    if (mote.y < -10) {
-      mote.y = window.innerHeight + 10;
-      mote.x = Math.random() * window.innerWidth;
-    }
-    ambientCtx.beginPath();
-    ambientCtx.arc(mote.x, mote.y, mote.size, 0, Math.PI * 2);
-    ambientCtx.fillStyle = `rgba(255, 232, 181, ${mote.alpha})`;
-    ambientCtx.fill();
-  });
+  if (activeStageIndex === 0) {
+    drawStarField(time);
+  } else {
+    motes.forEach((mote) => {
+      mote.y -= mote.speed;
+      mote.x += mote.drift;
+      if (mote.y < -10) {
+        mote.y = window.innerHeight + 10;
+        mote.x = Math.random() * window.innerWidth;
+      }
+      ambientCtx.beginPath();
+      ambientCtx.arc(mote.x, mote.y, mote.size, 0, Math.PI * 2);
+      ambientCtx.fillStyle = `rgba(255, 232, 181, ${mote.alpha})`;
+      ambientCtx.fill();
+    });
+  }
 
   bursts = bursts.filter((particle) => particle.alpha > 0.02);
   bursts.forEach((particle) => {
@@ -180,7 +314,8 @@ startButton.addEventListener("click", () => {
   setupAudio();
   if (audioContext && audioContext.state === "suspended") audioContext.resume();
   document.body.classList.add("has-started");
-  playChord([261.63, 329.63, 392]);
+  startSymphony();
+  playChord([261.63, 329.63, 392, 523.25]);
   activateStage(1);
 });
 
@@ -206,7 +341,21 @@ soundButton.addEventListener("click", () => {
   soundEnabled = !soundEnabled;
   soundIcon.textContent = soundEnabled ? "♪" : "×";
   soundButton.setAttribute("aria-label", soundEnabled ? "Desactivar sonido" : "Activar sonido");
-  if (soundEnabled) playNote(392, 0.15, 0.04);
+  if (!masterGain || !audioContext) return;
+
+  const now = audioContext.currentTime;
+  masterGain.gain.cancelScheduledValues(now);
+  masterGain.gain.setValueAtTime(Math.max(masterGain.gain.value, 0.0001), now);
+
+  if (soundEnabled) {
+    if (audioContext.state === "suspended") audioContext.resume();
+    masterGain.gain.exponentialRampToValueAtTime(0.72, now + 0.18);
+    if (!symphonyStarted) startSymphony();
+    else scheduleSymphonyCycle();
+    playNote(523.25, 0.24, 0.06, 0.05);
+  } else {
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+  }
 });
 
 window.addEventListener("resize", resizeAmbient);

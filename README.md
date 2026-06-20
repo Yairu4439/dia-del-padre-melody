@@ -7,7 +7,7 @@ Experiencia web escrita desde Melody para su papá.
 - `index.html`: tarjeta editable.
 - `assets/css/padre.css`: diseño y adaptación para celular.
 - `assets/js/padre.js`: escenas, sonidos e interacciones.
-- `assets/images/padre-hija-atardecer.jpg`: fotografía de portada.
+- `assets/images/`: recursos visuales del proyecto.
 - `dist/dia_del_padre_para_papa.html`: archivo único para compartir.
 - `tools/build-standalone.ps1`: vuelve a generar el archivo de `dist`.
 
@@ -17,10 +17,5 @@ Experiencia web escrita desde Melody para su papá.
 powershell -ExecutionPolicy Bypass -File .\tools\build-standalone.ps1
 ```
 
-## Fotografía
-
-Fotografía de Emotionary App en Unsplash:
-
-https://unsplash.com/photos/U16mzvT5UiU
-
-Uso bajo la licencia de Unsplash.
+La portada usa un universo animado creado con canvas y CSS: estrellas,
+cometas y mariposas luminosas sin dependencias externas.
