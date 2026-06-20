@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142623">
+  <title>Feliz Día del Padre</title>
+  <link rel="stylesheet" href="assets/css/padre.css">
+</head>
+<body>
+  <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <div class="progress" id="progress" aria-hidden="true">
+      <span class="progress-line is-active"></span>
+      <span class="progress-line"></span>
+      <span class="progress-line"></span>
+      <span class="progress-line"></span>
+    </div>
+    <button class="sound-button" id="soundButton" type="button" aria-label="Desactivar sonido" title="Sonido">
+      <span id="soundIcon" aria-hidden="true">♪</span>
+    </button>
+  </header>
+
+  <main class="experience">
+    <section class="stage hero-stage is-active" id="stage0" aria-labelledby="heroTitle">
+      <img class="hero-photo" src="assets/images/padre-hija-atardecer.jpg" alt="Padre e hija caminando juntos frente al atardecer">
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">21 de junio de 2026</p>
+        <h1 id="heroTitle">Para ti,<br>papá</h1>
+        <p class="hero-copy">Hoy quiero detener el tiempo un momento para agradecerte por todo aquello que haces, incluso por las cosas que muchas veces no sé cómo decir.</p>
+        <button class="primary-button" id="startButton" type="button">Abrir mi regalo</button>
+      </div>
+      <p class="photo-credit">Foto: Emotionary App / Unsplash</p>
+    </section>
+
+    <section class="stage gratitude-stage" id="stage1" aria-labelledby="gratitudeTitle" aria-hidden="true">
+      <div class="section-heading">
+        <p class="eyebrow">Antes de la carta</p>
+        <h2 id="gratitudeTitle">Hay cosas que quiero agradecerte</h2>
+        <p>No siempre las digo en voz alta, pero todas han dejado algo importante en mí.</p>
+      </div>
+
+      <div class="gratitude-list" aria-live="polite">
+        <article class="gratitude-item">
+          <span class="item-number">01</span>
+          <div>
+            <h3>Por estar</h3>
+            <p>Por cada manera, grande o pequeña, en la que me has hecho sentir acompañada.</p>
+          </div>
+        </article>
+        <article class="gratitude-item">
+          <span class="item-number">02</span>
+          <div>
+            <h3>Por cuidarme</h3>
+            <p>Por preocuparte por mí aun cuando no siempre lo expresas con muchas palabras.</p>
+          </div>
+        </article>
+        <article class="gratitude-item">
+          <span class="item-number">03</span>
+          <div>
+            <h3>Por enseñarme</h3>
+            <p>Por las lecciones que me diste hablando y también por todas las que aprendí observándote.</p>
+          </div>
+        </article>
+        <article class="gratitude-item">
+          <span class="item-number">04</span>
+          <div>
+            <h3>Por ser mi papá</h3>
+            <p>Porque una parte de la persona que soy hoy existe gracias a todo lo que sembraste en mí.</p>
+          </div>
+        </article>
+      </div>
+
+      <button class="primary-button reveal-next" id="gratitudeNext" type="button">Leer mi carta</button>
+    </section>
+
+    <section class="stage letter-stage" id="stage2" aria-labelledby="letterTitle" aria-hidden="true">
+      <article class="letter">
+        <aside class="letter-side">
+          <p class="eyebrow">Una carta para ti</p>
+          <div class="letter-date">21<br><span>junio</span></div>
+          <div class="initial" aria-hidden="true">M</div>
+        </aside>
+
+        <div class="letter-body">
+          <h2 id="letterTitle">Papá:</h2>
+
+          <p>Hoy no quiero decirte solamente “feliz día”. Quiero aprovechar este momento para darte las gracias.</p>
+
+          <p>Gracias por cada forma en la que has estado para mí, por tu esfuerzo, por tu preocupación y por todas esas cosas que quizá parecían pequeñas, pero que fueron construyendo una sensación de seguridad que siempre llevaré conmigo.</p>
+
+          <p>Tal vez no siempre encuentro las palabras correctas para decir lo que siento. A veces uno se acostumbra tanto al amor de su familia que olvida detenerse y reconocer todo lo que hay detrás de él.</p>
+
+          <blockquote>En ti aprendí que la fuerza no siempre hace ruido. Muchas veces se parece a levantarse otra vez, seguir trabajando, cuidar a la familia y tratar de hacer lo mejor posible incluso en los días difíciles.</blockquote>
+
+          <p>Si alguna vez no te lo he dicho lo suficiente, quiero que hoy quede escrito: valoro todo lo que has hecho por mí y me siento orgullosa de ser tu hija.</p>
+
+          <p>Espero que la vida nos regale muchos años más para compartir, hablar, reír y crear nuevos recuerdos. Y espero que hoy puedas sentir, aunque sea un poquito, todo el cariño y el agradecimiento que tengo para ti.</p>
+
+          <p class="closing-line">Feliz Día del Padre, papá. Te quiero mucho.</p>
+          <p class="signature">Con amor, Melody</p>
+
+          <button class="primary-button" id="letterNext" type="button">Abrir el último regalo</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="stage gift-stage" id="stage3" aria-labelledby="giftTitle" aria-hidden="true">
+      <div class="gift-inner">
+        <p class="eyebrow">Un último detalle</p>
+        <h2 id="giftTitle">Tengo un último mensaje para ti</h2>
+        <p class="gift-instruction">Solo toca el botón y deja que este pequeño regalo se abra.</p>
+
+        <div class="gift-emblem" aria-hidden="true">
+          <span class="emblem-core">M</span>
+          <span class="emblem-ring"></span>
+        </div>
+
+        <button class="primary-button gift-button" id="revealGiftButton" type="button">Ver mensaje final</button>
+
+        <div class="final-message" id="finalMessage" aria-live="polite">
+          <p>Gracias por ser parte de todo lo bueno que hay en mí.</p>
+          <h2>Feliz Día del Padre</h2>
+          <div class="final-words" aria-hidden="true">
+            <span>Guía</span>
+            <span>Refugio</span>
+            <span>Ejemplo</span>
+            <span>Hogar</span>
+          </div>
+          <span>Con amor, Melody</span>
+        </div>
+
+        <button class="secondary-button replay-button" id="replayButton" type="button">Volver a verlo</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/padre.js"></script>
+</body>
+</html>
