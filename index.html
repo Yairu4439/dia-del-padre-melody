@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,6 +8,7 @@
   <title>Feliz Día del Padre</title>
   <link rel="stylesheet" href="assets/css/padre.css">
 </head>
+
 <body>
   <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
   <audio id="backgroundMusic" src="assets/audio/melody-para-papa.m4a" preload="auto" autoplay loop playsinline></audio>
@@ -29,8 +31,9 @@
       </div>
       <div class="hero-content">
         <p class="eyebrow">Un pequeño universo de cariño</p>
-        <h1 id="heroTitle">De Melody<br>para ti, papá</h1>
-        <p class="hero-copy">Entre millones de estrellas, hay una luz que siempre me ha guiado: la tuya. Hoy quiero regalarte un momento hecho con todo mi cariño.</p>
+        <h1 id="heroTitle">De Melody<br>para ti, mi papito</h1>
+        <p class="hero-copy">Entre millones de estrellas, hay una luz que siempre me ha guiado: la tuya. Hoy quiero
+          regalarte un momento hecho con todo mi cariño.</p>
         <button class="primary-button" id="startButton" type="button">Entrar a mi regalo</button>
         <p class="hero-date">Día del Padre · 21 de junio de 2026</p>
       </div>
@@ -68,7 +71,7 @@
         <article class="gratitude-item">
           <span class="item-number">04</span>
           <div>
-            <h3>Por ser mi papá</h3>
+            <h3>Por ser mi papito</h3>
             <p>Porque una parte de la persona que soy hoy existe gracias a todo lo que sembraste en mí.</p>
           </div>
         </article>
@@ -86,21 +89,29 @@
         </aside>
 
         <div class="letter-body">
-          <h2 id="letterTitle">Papá:</h2>
+          <h2 id="letterTitle">Papito:</h2>
 
           <p>Hoy no quiero decirte solamente “feliz día”. Quiero aprovechar este momento para darte las gracias.</p>
 
-          <p>Gracias por cada forma en la que has estado para mí, por tu esfuerzo, por tu preocupación y por todas esas cosas que quizá parecían pequeñas, pero que fueron construyendo una sensación de seguridad que siempre llevaré conmigo.</p>
+          <p>Gracias por cada forma en la que has estado para mí, por tu esfuerzo, por tu preocupación y por todas esas
+            cosas que quizá parecían pequeñas, pero que fueron construyendo una sensación de seguridad que siempre
+            llevaré conmigo.</p>
 
-          <p>Tal vez no siempre encuentro las palabras correctas para decir lo que siento. A veces uno se acostumbra tanto al amor de su familia que olvida detenerse y reconocer todo lo que hay detrás de él.</p>
+          <p>Tal vez no siempre encuentro las palabras correctas para decir lo que siento. A veces uno se acostumbra
+            tanto al amor de su familia que olvida detenerse y reconocer todo lo que hay detrás de él.</p>
 
-          <blockquote>En ti aprendí que la fuerza no siempre hace ruido. Muchas veces se parece a levantarse otra vez, seguir trabajando, cuidar a la familia y tratar de hacer lo mejor posible incluso en los días difíciles.</blockquote>
+          <blockquote>En ti aprendí que la fuerza no siempre hace ruido. Muchas veces se parece a levantarse otra vez,
+            seguir trabajando, cuidar a la familia y tratar de hacer lo mejor posible incluso en los días difíciles.
+          </blockquote>
 
-          <p>Si alguna vez no te lo he dicho lo suficiente, quiero que hoy quede escrito: valoro todo lo que has hecho por mí y me siento orgullosa de ser tu hija.</p>
+          <p>Si alguna vez no te lo he dicho lo suficiente, quiero que hoy quede escrito: valoro todo lo que has hecho
+            por mí y me siento orgullosa de ser tu hija.</p>
 
-          <p>Espero que la vida nos regale muchos años más para compartir, hablar, reír y crear nuevos recuerdos. Y espero que hoy puedas sentir, aunque sea un poquito, todo el cariño y el agradecimiento que tengo para ti.</p>
+          <p>Espero que la vida nos regale muchos años más para compartir, hablar, reír y crear nuevos recuerdos. Y
+            espero que hoy puedas sentir, aunque sea un poquito, todo el cariño y el agradecimiento que tengo para ti.
+          </p>
 
-          <p class="closing-line">Feliz Día del Padre, papá. Te quiero mucho.</p>
+          <p class="closing-line">Feliz Día del Padre, mi papito. Te quiero mucho.</p>
           <p class="signature">Con amor, Melody</p>
 
           <button class="primary-button" id="letterNext" type="button">Abrir el último regalo</button>
@@ -114,9 +125,16 @@
         <h2 id="giftTitle">Tengo un último mensaje para ti</h2>
         <p class="gift-instruction">Solo toca el botón y deja que este pequeño regalo se abra.</p>
 
-        <div class="gift-emblem" aria-hidden="true">
-          <span class="emblem-core">M</span>
-          <span class="emblem-ring"></span>
+        <div class="gift-emblem" id="giftEmblem" aria-hidden="true">
+          <div class="emblem-galaxy">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="emblem-heart">
+            <span class="heart-letter">M</span>
+          </div>
+          <span class="emblem-orbit"></span>
         </div>
 
         <button class="primary-button gift-button" id="revealGiftButton" type="button">Ver mensaje final</button>
@@ -140,4 +158,5 @@
 
   <script src="assets/js/padre.js"></script>
 </body>
+
 </html>

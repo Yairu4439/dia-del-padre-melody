@@ -4,6 +4,7 @@ const gratitudeItems = Array.from(document.querySelectorAll(".gratitude-item"));
 const gratitudeNext = document.getElementById("gratitudeNext");
 const letterNext = document.getElementById("letterNext");
 const revealGiftButton = document.getElementById("revealGiftButton");
+const giftEmblem = document.getElementById("giftEmblem");
 const finalMessage = document.getElementById("finalMessage");
 const replayButton = document.getElementById("replayButton");
 const backgroundMusic = document.getElementById("backgroundMusic");
@@ -11,6 +12,7 @@ const ambientCanvas = document.getElementById("ambientCanvas");
 const ambientCtx = ambientCanvas.getContext("2d");
 
 let gratitudeTimers = [];
+let giftTimers = [];
 let motes = [];
 let stars = [];
 let comets = [];
@@ -65,9 +67,16 @@ function revealGratitude() {
 }
 
 function resetGift() {
+  giftTimers.forEach((timer) => clearTimeout(timer));
+  giftTimers = [];
   revealGiftButton.hidden = false;
   finalMessage.classList.remove("is-visible");
   replayButton.classList.remove("is-visible");
+  giftEmblem.classList.remove("is-forming", "is-heart", "show-letter");
+  void giftEmblem.offsetWidth;
+  giftEmblem.classList.add("is-forming");
+  giftTimers.push(setTimeout(() => giftEmblem.classList.add("is-heart"), 4100));
+  giftTimers.push(setTimeout(() => giftEmblem.classList.add("show-letter"), 4200));
 }
 
 function revealFinalMessage() {
