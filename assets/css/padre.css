@@ -54,65 +54,6 @@ button:focus-visible {
   pointer-events: none;
 }
 
-.topbar {
-  position: fixed;
-  z-index: 20;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 68px;
-  padding: calc(12px + var(--safe-top)) 20px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-.progress {
-  display: flex;
-  gap: 7px;
-  opacity: 0;
-  transition: opacity 350ms ease;
-}
-
-body.has-started .progress {
-  opacity: 1;
-}
-
-.progress-line {
-  width: 28px;
-  height: 3px;
-  background: rgba(255, 250, 241, 0.25);
-  transition: width 300ms ease, background 300ms ease;
-}
-
-.progress-line.is-active {
-  width: 44px;
-  background: var(--amber);
-}
-
-.sound-button {
-  width: 46px;
-  height: 46px;
-  padding: 0;
-  border: 1px solid rgba(255, 250, 241, 0.3);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: var(--white);
-  background: rgba(16, 33, 31, 0.5);
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: auto;
-  font-size: 1.15rem;
-  transition: opacity 300ms ease, transform 220ms ease;
-}
-
-body.has-started .sound-button {
-  opacity: 1;
-}
-
 .experience {
   position: relative;
   z-index: 1;
@@ -126,7 +67,7 @@ body.has-started .sound-button {
   inset: 0;
   min-height: 100vh;
   min-height: 100svh;
-  padding: calc(88px + var(--safe-top)) 20px calc(30px + var(--safe-bottom));
+  padding: calc(34px + var(--safe-top)) 20px calc(30px + var(--safe-bottom));
   display: grid;
   place-items: center;
   overflow-y: auto;

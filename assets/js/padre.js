@@ -1,5 +1,4 @@
 const stages = Array.from(document.querySelectorAll(".stage"));
-const progressLines = Array.from(document.querySelectorAll(".progress-line"));
 const startButton = document.getElementById("startButton");
 const gratitudeItems = Array.from(document.querySelectorAll(".gratitude-item"));
 const gratitudeNext = document.getElementById("gratitudeNext");
@@ -7,13 +6,10 @@ const letterNext = document.getElementById("letterNext");
 const revealGiftButton = document.getElementById("revealGiftButton");
 const finalMessage = document.getElementById("finalMessage");
 const replayButton = document.getElementById("replayButton");
-const soundButton = document.getElementById("soundButton");
-const soundIcon = document.getElementById("soundIcon");
 const backgroundMusic = document.getElementById("backgroundMusic");
 const ambientCanvas = document.getElementById("ambientCanvas");
 const ambientCtx = ambientCanvas.getContext("2d");
 
-let soundEnabled = true;
 let gratitudeTimers = [];
 let motes = [];
 let stars = [];
@@ -24,23 +20,14 @@ let lastDraw = 0;
 let nextCometAt = 900;
 let activeStageIndex = 0;
 
-function updateSoundControl() {
-  soundIcon.textContent = soundEnabled ? "♪" : "×";
-  soundButton.setAttribute("aria-label", soundEnabled ? "Pausar música" : "Reanudar música");
-  soundButton.title = soundEnabled ? "Pausar música" : "Reanudar música";
-}
-
 async function startBackgroundMusic() {
-  if (!backgroundMusic || !soundEnabled) return;
+  if (!backgroundMusic || !backgroundMusic.paused) return;
   backgroundMusic.volume = 1;
 
   try {
     await backgroundMusic.play();
-    delete soundButton.dataset.audioError;
-  } catch (error) {
-    soundEnabled = false;
-    soundButton.dataset.audioError = error.name || "PlaybackError";
-    updateSoundControl();
+  } catch {
+    // Los navegadores móviles pueden exigir el primer toque del usuario.
   }
 }
 
@@ -56,10 +43,6 @@ function activateStage(index) {
 
   stages[index].classList.add("is-active");
   stages[index].removeAttribute("aria-hidden");
-  progressLines.forEach((line, lineIndex) => {
-    line.classList.toggle("is-active", lineIndex === index);
-  });
-
   if (index === 1) revealGratitude();
   if (index === 3) resetGift();
 }
@@ -249,7 +232,6 @@ function drawAmbient(time) {
 }
 
 startButton.addEventListener("click", () => {
-  document.body.classList.add("has-started");
   startBackgroundMusic();
   activateStage(1);
 });
@@ -265,26 +247,14 @@ letterNext.addEventListener("click", () => {
 revealGiftButton.addEventListener("click", revealFinalMessage);
 
 replayButton.addEventListener("click", () => {
-  document.body.classList.remove("has-started");
   activateStage(0);
 });
 
-soundButton.addEventListener("click", async () => {
-  if (!backgroundMusic) return;
-
-  if (soundEnabled) {
-    soundEnabled = false;
-    backgroundMusic.pause();
-  } else {
-    soundEnabled = true;
-    await startBackgroundMusic();
-  }
-
-  updateSoundControl();
-});
-
 window.addEventListener("resize", resizeAmbient);
+window.addEventListener("load", startBackgroundMusic);
+document.addEventListener("pointerdown", startBackgroundMusic, { once: true });
+document.addEventListener("keydown", startBackgroundMusic, { once: true });
 
 resizeAmbient();
-updateSoundControl();
+startBackgroundMusic();
 animationFrame = requestAnimationFrame(drawAmbient);

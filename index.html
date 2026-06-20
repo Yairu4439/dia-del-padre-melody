@@ -9,19 +9,7 @@
 </head>
 <body>
   <canvas class="ambient-canvas" id="ambientCanvas" aria-hidden="true"></canvas>
-  <audio id="backgroundMusic" src="assets/audio/melody-para-papa.m4a" preload="auto" loop playsinline></audio>
-
-  <header class="topbar">
-    <div class="progress" id="progress" aria-hidden="true">
-      <span class="progress-line is-active"></span>
-      <span class="progress-line"></span>
-      <span class="progress-line"></span>
-      <span class="progress-line"></span>
-    </div>
-    <button class="sound-button" id="soundButton" type="button" aria-label="Desactivar sonido" title="Sonido">
-      <span id="soundIcon" aria-hidden="true">♪</span>
-    </button>
-  </header>
+  <audio id="backgroundMusic" src="assets/audio/melody-para-papa.m4a" preload="auto" autoplay loop playsinline></audio>
 
   <main class="experience">
     <section class="stage hero-stage is-active" id="stage0" aria-labelledby="heroTitle">
