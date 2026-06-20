@@ -7,6 +7,7 @@ Experiencia web escrita desde Melody para su papá.
 - `index.html`: tarjeta editable.
 - `assets/css/padre.css`: diseño y adaptación para celular.
 - `assets/js/padre.js`: escenas, sonidos e interacciones.
+- `assets/audio/melody-para-papa.m4a`: música de fondo.
 - `assets/images/`: recursos visuales del proyecto.
 - `dist/dia_del_padre_para_papa.html`: archivo único para compartir.
 - `tools/build-standalone.ps1`: vuelve a generar el archivo de `dist`.

@@ -34,6 +34,19 @@ $html = [regex]::Replace($html, $imagePattern, {
   return "src=`"data:image/$mimeType;base64,$base64`""
 })
 
+$audioPattern = 'src="assets/audio/([^"]+)"'
+$html = [regex]::Replace($html, $audioPattern, {
+  param($match)
+
+  $relativePath = $match.Groups[1].Value.Replace("/", "\")
+  $audioPath = Join-Path (Join-Path $root "assets\audio") $relativePath
+  $extension = [System.IO.Path]::GetExtension($audioPath).TrimStart(".").ToLowerInvariant()
+  $mimeType = if ($extension -eq "m4a") { "mp4" } elseif ($extension -eq "aac") { "aac" } else { $extension }
+  $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($audioPath))
+
+  return "src=`"data:audio/$mimeType;base64,$base64`""
+})
+
 [System.IO.Directory]::CreateDirectory((Split-Path -Parent $outputPath)) | Out-Null
 [System.IO.File]::WriteAllText($outputPath, $html, $utf8)
 
